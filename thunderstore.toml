@@ -1,9 +1,9 @@
-[config]
+﻿[config]
 schemaVersion = "0.0.1"
 
 [package]
 namespace = "CaptainOfCoit"
-name = "MyCoolMod"
+name = "OSMImporter"
 versionNumber = "0.1.0"
 description = "Example mod description"
 websiteUrl = "https://thunderstore.io"

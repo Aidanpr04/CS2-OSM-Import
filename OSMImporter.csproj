@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>OSMImporter</AssemblyName>
+    <RootNamespace>OSMImporter</RootNamespace>
+    <Description>OSM Importer mod for Cities Skylines 2</Description>
+    <Version>0.1.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <NoWarn>MSB3277</NoWarn>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <Cities2_Location>F:\Xbox\Cities- Skylines II - PC Edition\Content</Cities2_Location>
+    <OutputPath>$(Cities2_Location)\BepInEx\plugins\OSMImporter\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Colossal.*.dll" Private="False" />
+    <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Game.dll" Private="False" />
+    <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Unity.*.dll" Private="False" />
+    <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\UnityEngine.dll" Private="False" />
+    <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\UnityEngine.CoreModule.dll" Private="False" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.0.0" />
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" IncludeAssets="compile" />
+    <PackageReference Include="HarmonyX" Version="2.10.2" />
+    <PackageReference Include="OsmSharp" Version="6.2.0" />
+    <PackageReference Include="OsmSharp.Geo" Version="6.2.0" />
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.7" IncludeAssets="compile" />
+  </ItemGroup>
+
+<Target Name="RemoveConflicting" AfterTargets="PostBuild">
+  <Exec Command="if exist &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\protobuf-net.dll&quot; del /Q &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\protobuf-net.dll&quot;" />
+</Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(CI)' != 'true'">
+    <Exec Command="if not exist &quot;F:\Xbox\Cities- Skylines II - PC Edition\Content\BepInEx\plugins\OSMImporter&quot; mkdir &quot;F:\Xbox\Cities- Skylines II - PC Edition\Content\BepInEx\plugins\OSMImporter&quot;&#xA;xcopy /Y &quot;$(TargetDir)*.dll&quot; &quot;F:\Xbox\Cities- Skylines II - PC Edition\Content\BepInEx\plugins\OSMImporter\&quot;" />
+    <Exec Command="xcopy /Y &quot;$(TargetDir)*.dll&quot; &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\&quot;" />
+    <Exec Command="xcopy /Y &quot;$(TargetDir)*.json&quot; &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\&quot;" />
+    <Exec Command="if exist &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\netstandard2.1&quot; rmdir /S /Q &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\netstandard2.1&quot;" />
+  </Target>
+
+</Project>
